@@ -3,26 +3,24 @@
  *
  * @package components
  */
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./styles.module.css";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { INIT_TODO_LIST, INIT_UNIQUE_ID } from "../../../constants/data.js";
-import { AddTodo } from "../../organisms/AddTodo/index.jsx";
-import { TodoList } from "../../organisms/TodoList/index.jsx";
-import { InputForm } from "../../atoms/index.jsx";
-
+import { INIT_TODO_LIST, INIT_UNIQUE_ID } from "../../../constants/data";
 /**
  * TodoTemplate
  * @returns {JSX.Element}
  * @constructor
  */
 export const TodoTemplate = () => {
-  /* todo list */
-  const [originTodoList, setOriginTodoList] = useState(INIT_TODO_LIST);
-  /* add input title */
+  /** todo list */
+  const [todoList, setTodoList] = useState(INIT_TODO_LIST);
+  /** new todo */
   const [addInputValue, setAddInputValue] = useState("");
-  /* todo 採番ID */
+  /** todo　採番ID */
   const [uniqueId, setUniqueId] = useState(INIT_UNIQUE_ID);
-  /* search input title */
+  /** search word */
   const [searchInputValue, setSearchInputValue] = useState("");
 
   /* actions */
@@ -35,75 +33,90 @@ export const TodoTemplate = () => {
   };
 
   /**
-   * 検索キーワード更新処理
+   * searchInputValueの変更処理
    * @param {*} e
    */
-  const handleChangeSearchKeyword = (e) => {
+  const onChangeSearchInputValue = (e) => {
     setSearchInputValue(e.target.value);
   };
 
   /**
    * Todo登録処理
-   * @param { * } e
+   * @param {*} e
    */
   const handleAddTodo = (e) => {
     if (e.key === "Enter" && addInputValue !== "") {
-      const nextUniqueId = uniqueId + 1;
+      const newUniqueId = uniqueId + 1;
       const newTodoList = [
-        ...originTodoList,
+        ...todoList,
         {
-          id: nextUniqueId,
+          id: newUniqueId,
           title: addInputValue,
         },
       ];
-      setOriginTodoList(newTodoList);
-      // 採番IDを更新
-      setUniqueId(nextUniqueId);
-      // todo追加後、入力値をリセット
+      // 新しいTodoが追加された値でStateを更新
+      setTodoList(newTodoList);
+      // 新しい採番でStateを更新
+      setUniqueId(newUniqueId);
+      // 追加後、入力内容をリセット
       setAddInputValue("");
     }
   };
 
   /**
    * Todo削除処理
-   * @param { number } targetId
-   * @param { string } targetTitle
+   * @param {*} e
    */
   const handleDeleteTodo = (targetId, targetTitle) => {
-    if (window.confirm(`「${targetTitle}」のtodoを削除しますか？`)) {
-      const newTodoList = originTodoList.filter((todo) => todo.id !== targetId);
-      setOriginTodoList(newTodoList);
+    if (window.confirm(`「${targetTitle}」のTodoを削除しますか？`)) {
+      const newTodoList = todoList.filter((todo) => todo.id !== targetId);
+      setTodoList(newTodoList);
     }
   };
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Todo List</h1>
-      {/* タスク入力画面 */}
+      <h1 className={styles.title}>{"Todo List"}</h1>
+      {/* Todo追加エリア */}
       <section className={styles.common}>
-        <AddTodo
-          addInputValue={addInputValue}
-          onChangeAddInputValue={onChangeAddInputValue}
-          handleAddTodo={handleAddTodo}
+        <h2 className={styles.subTitle}>{"Add Todo"}</h2>
+        <input
+          className={styles.input}
+          type="text"
+          placeholder={"New Todo"}
+          value={addInputValue}
+          onChange={onChangeAddInputValue}
+          onKeyDown={handleAddTodo}
         />
       </section>
-      {/* タスク絞り込み画面 */}
+      {/* Todo検索フォームエリア */}
       <section className={styles.common}>
-        <InputForm
-          placeholder={"Search Keyword"}
-          inputValue={searchInputValue}
-          handleChangeValue={handleChangeSearchKeyword}
+        <input
+          className={styles.input}
+          type="text"
+          placeholder={"New Todo"}
+          value={searchInputValue}
+          onChange={onChangeSearchInputValue}
         />
       </section>
-      {/* タスク一覧表示画面 */}
+      {/* Todoリスト一覧表示 */}
       <section className={styles.common}>
-        {originTodoList.length > 0 && (
-          <TodoList
-            originTodoList={originTodoList}
-            searchInputValue={searchInputValue}
-            handleDeleteTodo={handleDeleteTodo}
-          />
-        )}
+        <ul className={styles.list}>
+          {todoList.map((todo) => {
+            return (
+              <li className={styles.todo} key={todo.id}>
+                <span className={styles.task}>{todo.title}</span>
+                <div className={styles.far}>
+                  <FontAwesomeIcon
+                    icon={faTrashAlt}
+                    size="lg"
+                    onClick={() => handleDeleteTodo(todo.id, todo.title)}
+                  />
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </section>
     </div>
   );
