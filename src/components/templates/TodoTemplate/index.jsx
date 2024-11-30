@@ -3,11 +3,12 @@
  *
  * @package components
  */
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styles from "./styles.module.css";
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import styles from "./styles.module.css";
 import { INIT_TODO_LIST, INIT_UNIQUE_ID } from "../../../constants/data";
+import AddTodo from "../../organisms/AddTodo";
+import TodoList from "../../organisms/TodoList";
+import InputForm from "../../atoms";
 /**
  * TodoTemplate
  * @returns {JSX.Element}
@@ -23,12 +24,14 @@ export const TodoTemplate = () => {
   /** search word */
   const [searchInputValue, setSearchInputValue] = useState("");
 
+  const [composing, setComposition] = useState(false);
+
   /* actions */
   /**
    * addInputValueの変更処理
    * @param {*} e
    */
-  const onChangeAddInputValue = (e) => {
+  const handleChangeAddInputValue = (e) => {
     setAddInputValue(e.target.value);
   };
 
@@ -36,7 +39,7 @@ export const TodoTemplate = () => {
    * searchInputValueの変更処理
    * @param {*} e
    */
-  const onChangeSearchInputValue = (e) => {
+  const handleChangeSearchInputValue = (e) => {
     setSearchInputValue(e.target.value);
   };
 
@@ -45,7 +48,7 @@ export const TodoTemplate = () => {
    * @param {*} e
    */
   const handleAddTodo = (e) => {
-    if (e.key === "Enter" && addInputValue !== "") {
+    if (e.key === "Enter" && addInputValue !== "" && !composing) {
       const newUniqueId = uniqueId + 1;
       const newTodoList = [
         ...todoList,
@@ -77,47 +80,35 @@ export const TodoTemplate = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{"Todo List"}</h1>
-      {/* Todo追加エリア */}
+      {/* Add Todo */}
       <section className={styles.common}>
-        <h2 className={styles.subTitle}>{"Add Todo"}</h2>
-        <input
-          className={styles.input}
-          type="text"
-          placeholder={"New Todo"}
-          value={addInputValue}
-          onChange={onChangeAddInputValue}
-          onKeyDown={handleAddTodo}
+        <AddTodo
+          addInputValue={addInputValue}
+          handleChangeAddInputValue={handleChangeAddInputValue}
+          handleAddTodo={handleAddTodo}
+          setComposition={setComposition}
         />
       </section>
-      {/* Todo検索フォームエリア */}
+      {/* Add Todo End*/}
+      {/* Search Todo */}
       <section className={styles.common}>
-        <input
-          className={styles.input}
-          type="text"
-          placeholder={"New Todo"}
-          value={searchInputValue}
-          onChange={onChangeSearchInputValue}
+        <InputForm
+          placeholderText={"Search Keyword"}
+          inputValue={searchInputValue}
+          handleChangeValue={handleChangeSearchInputValue}
+          setComposition={setComposition}
         />
       </section>
-      {/* Todoリスト一覧表示 */}
+      {/* Search Todo End*/}
+      {/* Todo List */}
       <section className={styles.common}>
-        <ul className={styles.list}>
-          {todoList.map((todo) => {
-            return (
-              <li className={styles.todo} key={todo.id}>
-                <span className={styles.task}>{todo.title}</span>
-                <div className={styles.far}>
-                  <FontAwesomeIcon
-                    icon={faTrashAlt}
-                    size="lg"
-                    onClick={() => handleDeleteTodo(todo.id, todo.title)}
-                  />
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+        <TodoList
+          todoList={todoList}
+          searchInputValue={searchInputValue}
+          handleDeleteTodo={handleDeleteTodo}
+        />
       </section>
+      {/* Todo List End*/}
     </div>
   );
 };
