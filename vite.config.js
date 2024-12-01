@@ -5,4 +5,9 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   base: "/react-output-todo-react-only/",
+  test: {
+    global: true,
+    environment: "jsdom",
+    setupFiles: "src/setup.js",
+  },
 });
