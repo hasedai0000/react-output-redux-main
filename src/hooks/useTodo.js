@@ -1,13 +1,15 @@
 import { useState, useMemo } from "react";
-import { INIT_TODO_LIST, INIT_UNIQUE_ID } from "../constants/data";
+import { useSelector, useDispatch } from "react-redux";
+import { addTodo, deleteTodo } from "../store/todo";
 
 export const useTodo = () => {
-  /** todo list */
-  const [todoList, setTodoList] = useState(INIT_TODO_LIST);
+  /** state */
+  // @ts-ignore
+  const todoList = useSelector((state) => state.todo.todos);
+  const dispatch = useDispatch();
+
   /** new todo */
   const [addInputValue, setAddInputValue] = useState("");
-  /** todo　採番ID */
-  const [uniqueId, setUniqueId] = useState(INIT_UNIQUE_ID);
   /** search word */
   const [searchInputValue, setSearchInputValue] = useState("");
   /** コンポジションモード */
@@ -51,18 +53,8 @@ export const useTodo = () => {
    */
   const handleAddTodo = (e) => {
     if (e.key === "Enter" && addInputValue !== "" && !composing) {
-      const newUniqueId = uniqueId + 1;
-      const newTodoList = [
-        ...todoList,
-        {
-          id: newUniqueId,
-          title: addInputValue,
-        },
-      ];
-      // 新しいTodoが追加された値でStateを更新
-      setTodoList(newTodoList);
-      // 新しい採番でStateを更新
-      setUniqueId(newUniqueId);
+      // Todo追加処理
+      dispatch(addTodo(addInputValue));
       // 追加後、入力内容をリセット
       setAddInputValue("");
     }
@@ -73,10 +65,8 @@ export const useTodo = () => {
    * @param {*} e
    */
   const handleDeleteTodo = (targetId, targetTitle) => {
-    if (window.confirm(`「${targetTitle}」のTodoを削除しますか？`)) {
-      const newTodoList = todoList.filter((todo) => todo.id !== targetId);
-      setTodoList(newTodoList);
-    }
+    if (window.confirm(`「${targetTitle}」のTodoを削除しますか？`))
+      dispatch(deleteTodo(targetId));
   };
 
   return {
