@@ -1,14 +1,14 @@
 # react-output-first
-Reactアウトプットサンプル
 
-useState, Propsのみの状態管理でTodoリストの基本的な機能を構築
+React アウトプットサンプル
 
+useState, Props のみの状態管理で Todo リストの基本的な機能を構築
 
-urlはこちら
-https://yukionishi1129.github.io/react-output-first/
-
+url はこちら
+https://hasedai0000.github.io/react-output-redux-main/
 
 ## 目次
+
 1. 環境構築
 2. アプリケーションの仕様
 
@@ -37,13 +37,15 @@ yarn dev
 ## 2. アプリケーションの仕様
 
 ### 2-1. 仕様
-- Todoリスト
-  - Todo一覧表示
-  - Todo検索処理
-  - Todo新規登録処理
-  - Todo削除処理
+
+- Todo リスト
+  - Todo 一覧表示
+  - Todo 検索処理
+  - Todo 新規登録処理
+  - Todo 削除処理
 
 ### 2-2. 構成技術
+
 - react: 18.2.0
 - react-dom: 18.2.0
 - vite: 3.1.0
