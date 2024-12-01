@@ -1,11 +1,11 @@
 # react-output-first
 
-React アウトプット
+React アウトプットサンプル
 
 useState, Props のみの状態管理で Todo リストの基本的な機能を構築
 
 url はこちら
-https://hasedai0000.github.io/react-output-todo-react-only/
+https://hasedai0000.github.io/react-output-redux-main/
 
 ## 目次
 
