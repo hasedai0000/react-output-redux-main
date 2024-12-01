@@ -3,6 +3,7 @@
  *
  * @package pages
  */
+import { TodoProvider } from "../contexts/TodoContext.jsx";
 import { TodoTemplate } from "../components/templates/TodoTemplate";
 
 /**
@@ -10,4 +11,8 @@ import { TodoTemplate } from "../components/templates/TodoTemplate";
  * @returns {JSX.Element}
  * @constructor
  */
-export const TodoPage = () => <TodoTemplate />;
+export const TodoPage = () => (
+  <TodoProvider>
+    <TodoTemplate />
+  </TodoProvider>
+);

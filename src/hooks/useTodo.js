@@ -79,19 +79,14 @@ export const useTodo = () => {
     }
   };
 
-  const state = {
+  return {
     addInputValue,
     searchInputValue,
     showTodoList,
-  };
-
-  const actions = {
     setComposition,
     handleChangeAddInputValue,
     handleChangeSearchInputValue,
     handleAddTodo,
     handleDeleteTodo,
   };
-
-  return [state, actions];
 };
